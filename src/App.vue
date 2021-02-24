@@ -20,4 +20,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+h1 {
+  font-size: 40px;
+}
+</style>
