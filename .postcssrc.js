@@ -12,7 +12,13 @@ module.exports = {
   // 作用：把 px 转为 rem
   'postcss-pxtorem': {
     rootValue({ file }) {
-      return file.indexOf('vant') !== -1 ? 37.5 : 75
+      // file => 要编译的样式的路径
+
+      // indexOf() 找不到 vant 则返回 -1, -1 !== -1 为 false 所以不是vant组件的则是75
+      // return file.indexOf('vant') !== -1 ? 37.5 : 75
+
+      // includes 返回的直接是布尔值
+      return file.includes('vant') ? 37.5 : 75
     },
     propList: ['*']
   }
