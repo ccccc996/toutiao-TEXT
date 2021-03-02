@@ -23,8 +23,23 @@
         maxlength="6"
       >
         <i slot="left-icon" class="toutiao toutiao-yanzhengma"></i>
+
         <template #button>
-          <van-button round size="mini" type="default">发送验证码</van-button>
+          <van-count-down
+            :time="1000 * 5"
+            format="ss s"
+            v-if="isCountDownShow"
+            @finish="isCountDownShow = false"
+          />
+          <van-button
+            round
+            size="mini"
+            v-else
+            type="default"
+            native-type="button"
+            @click="onSendSms"
+            >发送验证码</van-button
+          >
         </template>
       </van-field>
       <div class="login-btn-wrap">
@@ -46,7 +61,7 @@ export default {
     return {
       user: {
         mobile: '13911111111',
-        code: '246810'
+        code: '' // 246810
       },
       userFormRules: {
         mobile: [
@@ -57,7 +72,8 @@ export default {
           { required: true, message: '请填写验证码' },
           { pattern: /^\d{6}$/, message: '验证码格式错误' }
         ]
-      }
+      },
+      isCountDownShow: false
     }
   },
 
@@ -80,6 +96,17 @@ export default {
           this.$toast.fail('登录失败，请稍后重试')
         }
       }
+    },
+    async onSendSms() {
+      try {
+        await this.$refs.loginForm.validate('mobile')
+        // const r = await sendSms(this.user.mobile)
+        // console.log('获取验证码成功')
+      } catch (err) {
+        console.log('获取验证码失败')
+      }
+
+      this.isCountDownShow = true
     }
   }
 }
