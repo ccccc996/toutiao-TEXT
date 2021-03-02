@@ -3,7 +3,7 @@
     <!-- 标题 -->
     <van-nav-bar title="登录" class="login-nav-bar" />
     <!-- 表单 -->
-    <van-form>
+    <van-form @submit="onSubmit">
       <van-field
         v-model="user.mobile"
         name="mobile"
@@ -37,8 +37,10 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
+
 export default {
-  name: 'login',
+  name: 'loginIndex',
 
   data() {
     return {
@@ -59,7 +61,17 @@ export default {
     }
   },
 
-  methods: {}
+  methods: {
+    async onSubmit() {
+      try {
+        const data = await login(this.user)
+        console.log(data, '登陆成功')
+        // this.$toast('登陆成功')
+      } catch (err) {
+        console.log(err, '登陆失败')
+      }
+    }
+  }
 }
 </script>
 
