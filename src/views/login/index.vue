@@ -3,7 +3,7 @@
     <!-- 标题 -->
     <van-nav-bar title="登录" class="login-nav-bar" />
     <!-- 表单 -->
-    <van-form @submit="onSubmit">
+    <van-form @submit="onSubmit" ref="loginForm">
       <van-field
         v-model="user.mobile"
         name="mobile"
@@ -63,12 +63,22 @@ export default {
 
   methods: {
     async onSubmit() {
+      // 自定义加载图标
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const data = await login(this.user)
         console.log(data, '登陆成功')
-        // this.$toast('登陆成功')
+        this.$toast.success('登陆成功')
       } catch (err) {
-        console.log(err, '登陆失败')
+        if (err.response && err.response.status === 400) {
+          this.$toast.fail('手机号或者验证码错误')
+        } else {
+          this.$toast.fail('登录失败，请稍后重试')
+        }
       }
     }
   }
