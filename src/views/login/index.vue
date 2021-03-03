@@ -55,7 +55,7 @@
 import { login, sendSms } from '@/api/user'
 
 export default {
-  name: 'loginIndex',
+  name: 'LoginIndex',
 
   data() {
     return {
