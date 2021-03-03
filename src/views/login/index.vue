@@ -86,8 +86,9 @@ export default {
         duration: 0
       })
       try {
-        const data = await login(this.user)
-        console.log(data, '登陆成功')
+        const { data } = await login(this.user)
+        this.$store.commit('setUser', data.data)
+        // console.log(data.data, '登陆成功')
         this.$toast.success('登陆成功')
       } catch (err) {
         if (err.response && err.response.status === 400) {
@@ -110,7 +111,8 @@ export default {
 
       // 3. 请求发送验证码
       try {
-        await sendSms(this.user.mobile)
+        const { data } = await sendSms(this.user.mobile)
+        this.$store.commit('setUser', data.data)
         this.$toast('发送成功')
       } catch (err) {
         if (err.response && err.response.status === 429) {
