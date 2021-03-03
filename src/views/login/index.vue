@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
 
 export default {
   name: 'loginIndex',
@@ -98,15 +98,27 @@ export default {
       }
     },
     async onSendSms() {
+      // 1. 校验手机号的合法性
       try {
         await this.$refs.loginForm.validate('mobile')
-        // const r = await sendSms(this.user.mobile)
-        // console.log('获取验证码成功')
       } catch (err) {
         console.log('获取验证码失败')
       }
 
+      // 2. 隐藏发送验证码按钮显示倒计时
       this.isCountDownShow = true
+
+      // 3. 请求发送验证码
+      try {
+        await sendSms(this.user.mobile)
+        this.$toast('发送成功')
+      } catch (err) {
+        if (err.response && err.response.status === 429) {
+          this.$toast('发送太频繁了，请稍后重试')
+        } else {
+          this.$toast('发送失败，请稍后重试')
+        }
+      }
     }
   }
 }
